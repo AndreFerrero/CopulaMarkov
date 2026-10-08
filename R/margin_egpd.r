@@ -3,14 +3,8 @@
 #' Constructs an EGPD margin with parameters `kappa`, `sigma` and `xi`,
 #' backed by the \pkg{egpd} package.
 #'
-#' @param kappa Shape parameter of the extension, must be positive.
-#' @param sigma Scale parameter, must be positive.
-#' @param xi Tail (shape) parameter of the GPD.
+#' @param par Named parameter vector (kappa, sigma, xi)
 #' @return An object of class `c("egpd", "margin")`.
-#' @examples
-#' m <- egpd_margin(kappa = 1.5, sigma = 1, xi = 0.1)
-#' m
-#' margin_quantile(m, c(0.5, 0.9, 0.99))
 #' @export
 egpd_margin <- function(par = NULL) {
   if(is.null(par)) return(new_margin(par, class = "egpd"))
@@ -23,7 +17,7 @@ egpd_margin <- function(par = NULL) {
   new_margin(c(kappa = kappa, sigma = sigma, xi = xi), class = "egpd")
 }
 
-#' @describeIn margin_cdf EGPD margin, via `egpd::pegpd()`.
+#' @describeIn p_margin EGPD margin, via `egpd::pegpd()`.
 #' @export
 p_margin.egpd <- function(margin, x, ...) {
   param <- margin$param
@@ -37,7 +31,7 @@ p_margin.egpd <- function(margin, x, ...) {
   unname(prob)
 }
 
-#' @describeIn margin_quantile EGPD margin, via `egpd::qegpd()`.
+#' @describeIn q_margin EGPD margin, via `egpd::qegpd()`.
 #' @export
 q_margin.egpd <- function(margin, p, ...) {
   param <- margin$param
@@ -51,6 +45,8 @@ q_margin.egpd <- function(margin, p, ...) {
   unname(quant)
 }
 
+#' @describeIn d_margin EGPD margin, via `egpd::degpd_density()`.
+#' @export
 d_margin.egpd <- function(margin, x, log = FALSE, ...) {
   param <- margin$param
 
@@ -65,6 +61,8 @@ d_margin.egpd <- function(margin, x, log = FALSE, ...) {
   unname(dens)
 }
 
+#' @describeIn r_margin EGPD margin, via `egpd::regpd()`.
+#' @export
 r_margin.egpd <- function(margin, n, ...) {
   param <- margin$param
   egpd::regpd(n, kappa = param["kappa"], sigma = param["sigma"], xi = param["xi"])

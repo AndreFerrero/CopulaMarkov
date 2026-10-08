@@ -6,9 +6,10 @@
 #' @export
 p_margin <- function(margin, x, ...) UseMethod("p_margin")
 
-#' Log-density of a margin
+#' Density of a margin
 #' @param margin A `margin` object.
 #' @param x Numeric vector of quantiles.
+#' @param log Logical to indicate whether to return the log density
 #' @param ... Passed to methods.
 #' @return Numeric vector of log-density values.
 #' @export
@@ -45,8 +46,10 @@ new_margin <- function(param, ..., class) {
 }
 
 #' Utility to update margin parameters
+#' @param margin A margin object
+#' @param new_param Vector of new parameter values
 #' @export
-param_update <- function(margin, new_param, ...) {
+param_update <- function(margin, new_param) {
   stopifnot(length(new_param) == length(margin$param))
 
   param_names <- names(margin$param)

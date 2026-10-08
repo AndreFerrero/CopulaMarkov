@@ -22,24 +22,24 @@ copula_markov <- function(margin, copula) {
 #' Simulate Copula Markov Model using Inverse Rosenblatt Transform
 #'
 #' @param object Copula Markov model.
-#' @param n Sample size.
+#' @param nsim Sample size.
 #' @param seed Optional random seed.
 #' @param ... Passed to methods.
 #' @return A list containing data on the margin scale (`X`) and copula
 #'   scale (`U`).
 #' @export
-simulate.copula_markov <- function(object, n, seed = NULL, ...) {
+simulate.copula_markov <- function(object, nsim, seed = NULL, ...) {
 
   if (!is.null(seed)) {
     set.seed(seed)
   }
 
-  V <- runif(n, 1e-5, 1 - 1e-5)
+  V <- runif(nsim, 1e-5, 1 - 1e-5)
 
-  U <- numeric(n)
+  U <- numeric(nsim)
   U[1] <- V[1]
 
-  for (t in 2:n) {
+  for (t in 2:nsim) {
     U[t] <- copula::cCopula(
       cbind(U[t - 1], V[t]),
       copula = object$copula,
@@ -99,7 +99,7 @@ log_lik.copula_markov <- function(object, par, x, ...) {
   )
 
   # Transform observations to copula scale
-  n <- length(x)
+  nsim <- length(x)
 
   log_f <- d_margin(
     margin,
@@ -114,7 +114,7 @@ log_lik.copula_markov <- function(object, par, x, ...) {
 
   # Copula contribution for consecutive observations
   log_c <- copula::dCopula(
-    cbind(u[-n], u[-1]),
+    cbind(u[-nsim], u[-1]),
     cop,
     log = TRUE
   )
@@ -135,7 +135,7 @@ log_lik.copula_markov <- function(object, par, x, ...) {
 #' @param init Initial parameter vector on the natural parameter scale.
 #' @param x Observed data.
 #' @param ... Passed to methods.
-#' @return An `optim` result.
+#' @return Fitted parameter vector
 #' @export
 fit <- function(object, init, x, ...) {
   UseMethod("fit")
