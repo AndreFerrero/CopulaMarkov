@@ -48,7 +48,6 @@ new_margin <- function(param, ..., class) {
 #' Utility to update margin parameters
 #' @param margin A margin object
 #' @param new_param Vector of new parameter values
-#' @export
 param_update <- function(margin, new_param) {
   stopifnot(length(new_param) == length(margin$param))
 
