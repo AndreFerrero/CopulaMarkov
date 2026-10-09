@@ -1,9 +1,9 @@
 Package: CopulaMarkov
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Copula-based Markov Models
+Version: 0.1.0
 Authors@R: 
     person("Andrea", "Ferrero", , "andrea.ferrero@umontpellier.fr", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Description: Construct, simulate from and fit copula-based Markov models.
 License: MIT + file LICENSE
 Config/roxygen2/version: 8.1.0
 Encoding: UTF-8
