@@ -40,12 +40,25 @@ simulate.copula_markov <- function(object, nsim, seed = NULL, ...) {
   U[1] <- V[1]
 
   for (t in 2:nsim) {
-    U[t] <- copula::cCopula(
+  ans <- tryCatch(
+    copula::cCopula(
       cbind(U[t - 1], V[t]),
       copula = object$copula,
       inverse = TRUE
-    )[, 2]
-  }
+    )[, 2],
+    error = function(e) {
+      stop(
+        sprintf(
+          "Conditional inversion failed at t = %d (U[t-1] = %.17g, V[t] = %.17g): %s",
+          t, U[t - 1], V[t], conditionMessage(e)
+        ),
+        call. = FALSE
+      )
+    }
+  )
+
+  U[t] <- ans
+}
 
   X <- q_margin(object$margin, U)
 
